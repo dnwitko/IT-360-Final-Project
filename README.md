@@ -14,7 +14,7 @@
   
 ## Stakeholders 
 **Sponsor designation:**  
-Santander Bank will be commissioning Mandiant for an internal audit, who will license our tool [2].
+Santander Bank will commission Mandiant for an internal audit, who will license our tool [2].
 
 **Stakeholder list (with assigned roles and responsibilities):**  
 
