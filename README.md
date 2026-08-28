@@ -17,20 +17,20 @@ Provide a file path to a folder or a drive and analyze most or all log files ass
 **End Date:** December 5th, 2026  
   
 ## Stakeholders 
-**Sponsor designation:** Santander Bank will commission Mandiant for an internal audit, who will license our tool [2].
+**Sponsor designation:** Santander Bank will commission Mandiant for an internal audit, who will license our tool [2][3].
 
 ### **Stakeholder list:**  
 
-**Santander Bank**
+**Santander Bank**[3]  
 - **CISO (Chief Info Security Officer):** Allocates funding and oversees the project.
 - **SOC Lead:** Coordinates the teams and provides expertise on subject matter.
 - **Internal Data Owners:** Provides sample logs for analysis and testing.
 
-**Mandiant**
+**Mandiant**[2]  
 - **Incident Response Engagement Director:** Oversees project delivery, budget management, scope adherence, and final presentation.  
 - **Security Analyst:** Deploys our log analysis tool. Essentially the main user of the product.  
 
-**Development Team**
+**Development Team**  
 - **Developers:** Ensures the tool works correctly and acts as a point of contact for Mandiant. Maintains transparency with other stakeholders.
 
 ## Scope Management 
@@ -54,9 +54,11 @@ Provide a file path to a folder or a drive and analyze most or all log files ass
 
 **Constraints:**  
 - Time constraints
+- Encrypted file formats
+- Lack of log context (nothing to piece clues together from)
+- Sensitive documents exposing personally identifiable information (PII)
 
 ## Timeline 
-**Milestones with key dates and deliverables:**  
 1. **Project Proposal/Plan** - Submitted by August 27, 2026.
 2. **Log Parsing (Drain3)** - Functional by middle of September.
 3. **Flagging/Reporting (NetworkX)** - Functional by middle of October.
@@ -65,7 +67,6 @@ Provide a file path to a folder or a drive and analyze most or all log files ass
 6. **Submit Project** - Submitted during first week of December.
 
  ## Risk Management 
-**Identified risks with impact/probability assessments:**  
 - LLM Hallucinations/Inaccurate Analysis
   - Impact: Medium
   - Probability: Low
@@ -91,7 +92,7 @@ We will need a budget of $20.00 - $50.00 for API credits, but if the LLM is good
 
 **Project Dependencies:** [1]  
 - **drain3 (version 0.9.11):** Dynamic Log Template Mining for parsing different types of log files.   
-- **networkx (version 3.1):** Provenance Graph for creating a timeline of events, identifying key variables, etc.  
+- **networkx (version 3.1):** Maps data into graphs for creating a timeline of events, identifying key variables, etc.  
 - **evtx (version 0.7.4):** Python Library for parsing Windows Event Logs.  
 - **colorama (version 0.4.6, optional):** Makes terminal output prettier.  
 
@@ -104,8 +105,13 @@ iMessage, Microsoft Teams, Microsoft Outlook
 
 ## Action Items 
 - Meeting with Stakeholders regularly to hear their comments on requirements.
+- Environment setup and dependency installation.
+- Gather common forensic log file paths.
+- Configure Drain3 and python-evtx.
+- Implement NetworkX.
+- LLM integration and report generation testing.
 
 ## References
 [1] - Google Gemini  
-[2] - Madiant Wikipedia  
-[3] - Santander Bank Wikipedia  
+[2] - Mandiant: https://www.zdnet.com/article/fireeyes-mandiant-debuts-new-saas-threat-intelligence-suite/  
+[3] - Santander Bank: https://therecord.media/santander-employees-bank-breach-affected
