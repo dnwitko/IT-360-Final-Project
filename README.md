@@ -1,21 +1,23 @@
 # Project Proposal
 
 ## Overview 
-**Project name:** Log Analysis And Summary Tool (L.A.A.S.T)
-
+**Project name:** Log Analysis And Summary Tool (L.A.A.S.T)  
 **Description:** A post-intrusion detection tool that analyzes log files of different formats (.txt, .evtx, etc.) and generates a comprehensive summary of the data found.  
 
-**Objectives:** Analyze log files, ability to parse multiple different file formats, relatively fast speeds, summary generated is accurate to the scenario. 
+**Objectives:**  
+- Analyze log files
+- Ability to parse multiple different file formats
+- Relatively fast speeds
+- Summary generated is accurate to the scenario 
 
-**Success criteria:** Provide a file path to a folder or a drive and analyze most or all log files associated, then generate an accurate summary of the data.  
+**Success criteria:**  
+Provide a file path to a folder or a drive and analyze most or all log files associated, then generate an accurate summary of the data.  
 
 **Start Date:** August 27th, 2026  
-
 **End Date:** December 5th, 2026  
   
 ## Stakeholders 
-**Sponsor designation:**  
-Santander Bank will commission Mandiant for an internal audit, who will license our tool [2].
+**Sponsor designation:** Santander Bank will commission Mandiant for an internal audit, who will license our tool [2].
 
 ### **Stakeholder list:**  
 
@@ -28,8 +30,8 @@ Santander Bank will commission Mandiant for an internal audit, who will license 
 - **Incident Response Engagement Director:** Oversees project delivery, budget management, scope adherence, and final presentation.  
 - **Security Analyst:** Deploys our log analysis tool. Essentially the main user of the product.  
 
-**Developers**
-- Ensures the tool works correctly and acts as a point of contact for Mandiant.
+**Development Team**
+- **Developers:** Ensures the tool works correctly and acts as a point of contact for Mandiant. Maintains transparency with other stakeholders.
 
 ## Scope Management 
 **In-scope items:**  
@@ -65,13 +67,21 @@ Santander Bank will commission Mandiant for an internal audit, who will license 
  ## Risk Management 
 **Identified risks with impact/probability assessments:**  
 - LLM Hallucinations/Inaccurate Analysis
+  - Impact: Medium
+  - Probability: Low
+  - Mitigation: Exploring various models to find the best qualities.
 - Malformed or Corrupted logs [1]
-- Sensitive Data
+  - Impact: Medium
+  - Probability: Low
+  - Mitigation: Flagging files for manual review, compiled into a comprehensive list.
 - Encrypted Files
+  - Impact: High
+  - Probability: Medium
+  - Mitigation: Decrypt first, analyze later; Flag files for manual review.
 
  ## Resources 
 **Budget Allocation:** [1]    
-We will need a budget of $20.00 - $50.00 for API credits, but if the LLM is running locally, we will need a $0.00 budget to complete this project. 
+We will need a budget of $20.00 - $50.00 for API credits, but if the LLM is good enough to run locally, we will need a $0.00 budget to complete this project. 
 
 **Required Tools and Technology:**  
 - Python 3.0
