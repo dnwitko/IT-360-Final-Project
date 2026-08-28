@@ -10,13 +10,14 @@
 **Success criteria:** Provide a file path to a folder or a drive and analyze most or all log files associated, then generate an accurate summary of the data.  
 
 **Start Date:** August 27th, 2026  
+
 **End Date:** December 5th, 2026  
   
 ## Stakeholders 
 **Sponsor designation:**  
 Santander Bank will commission Mandiant for an internal audit, who will license our tool [2].
 
-**Stakeholder list (with assigned roles and responsibilities):**  
+### **Stakeholder list:**  
 
 **Santander Bank**
 - **CISO (Chief Info Security Officer):** Allocates funding and oversees the project.
@@ -32,9 +33,9 @@ Santander Bank will commission Mandiant for an internal audit, who will license 
 
 ## Scope Management 
 **In-scope items:**  
-- File directory traversal  
-- Parsing Windows Event Logs (.evtx) and flat text logs  
-- LLM API integration for narrative generation  
+- File directory traversal
+- Parsing Windows Event Logs (.evtx) and text (.txt) logs
+- LLM API integration for narrative generation
 - Identifying and flagging un-analyzable/suspicious files for manual review
 - Generating a final text/HTML report
 
@@ -43,21 +44,23 @@ Santander Bank will commission Mandiant for an internal audit, who will license 
 - Active network monitoring
 - Decrypting encrypted files
 
-**Project assumptions and constraints:**  
-- Log files are written in English  
-- Logs follow a standard format  
-- LLM Model is available when needed  
-- Time constraints  
-- Drain3 and NetworkX work correctly  
+### **Project assumptions and constraints:**   
+**Assumptions:**  
+- Logs follow a standard format
+- The LLM Model is available when needed
+- Drain3 and NetworkX work as intended  
+
+**Constraints:**  
+- Time constraints
 
 ## Timeline 
 **Milestones with key dates and deliverables:**  
-1. Project Proposal/Plan - August 27, 2026
-2. Log Parsing (Drain3) - Mid September
-3. Flagging/Reporting (NetworkX) - Mid October
-4. AI/LLM Summary - First week of November
-5. Testing - Last week of November
-6. Submit Project - First week of December
+1. **Project Proposal/Plan** - Submitted by August 27, 2026.
+2. **Log Parsing (Drain3)** - Functional by middle of September.
+3. **Flagging/Reporting (NetworkX)** - Functional by middle of October.
+4. **AI/LLM Summary** - Functional by the first week of November.
+5. **Testing** - Fully completed by last week of November.
+6. **Submit Project** - Submitted during first week of December.
 
  ## Risk Management 
 **Identified risks with impact/probability assessments:**  
@@ -71,20 +74,20 @@ Santander Bank will commission Mandiant for an internal audit, who will license 
 We will need a budget of $20.00 - $50.00 for API credits, but if the LLM is running locally, we will need a $0.00 budget to complete this project. 
 
 **Required Tools and Technology:**  
-- Python 3
+- Python 3.0
 - python-evtx library
 - LLM API keys
-- Sample Attack Logs [1]  
+- Sample attack logs [1]  
 
 **Project Dependencies:** [1]  
 - **drain3 (version 0.9.11):** Dynamic Log Template Mining for parsing different types of log files.   
-- **networkx (version 3.1):** Provenance Graph for creating a timeline of events, ids, etc.  
+- **networkx (version 3.1):** Provenance Graph for creating a timeline of events, identifying key variables, etc.  
 - **evtx (version 0.7.4):** Python Library for parsing Windows Event Logs.  
 - **colorama (version 0.4.6, optional):** Makes terminal output prettier.  
 
 ## Communication 
 **Meeting Cadence and Reporting Frequency:**  
-We will plan to meet or report progress at least once per week with each other.  
+We will plan to meet and report progress at least once per week with each other.  
 
 **Communication Channels:**  
 iMessage, Microsoft Teams, Microsoft Outlook  
