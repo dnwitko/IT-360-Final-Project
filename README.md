@@ -1,117 +1,90 @@
-# Project Proposal
+# L.A.A.S.T (Log Analysis And Summary Tool)
 
-## Overview 
-**Project name:** Log Analysis And Summary Tool (L.A.A.S.T)  
-**Description:** A post-intrusion detection tool that analyzes log files of different formats (.txt, .evtx, etc.) and generates a comprehensive summary of the data found.  
+L.A.A.S.T is a post-intrusion log analysis tool. It scans a folder for Windows Event Logs (`.evtx`) and text logs (`.txt`, `.log`, `.json`, `.jsonl`), groups their events into templates with [Drain3](https://github.com/logpai/Drain3), maps how events follow one another with [NetworkX](https://networkx.org/), points out activity that looks like an attack, and produces an interactive HTML report. Files or folders that cannot be fully analyzed are always flagged for manual review.
 
-**Objectives:**  
-- Analyze log files
-- Ability to parse multiple different file formats
-- Relatively fast speeds
-- Summary generated is accurate to the scenario 
+The project plan is in [docs/ProjectProposal.md](docs/ProjectProposal.md).
 
-**Success criteria:**  
-Provide a file path to a folder or a drive and analyze most or all log files associated, then generate an accurate summary of the data.  
+## Requirements
 
-**Start Date:** August 27th, 2026  
-**End Date:** December 5th, 2026  
-  
-## Stakeholders 
-**Sponsor designation:** Santander Bank will commission Mandiant for an internal audit, who will license our tool [2][3].
+- Python 3.8 or newer
+- The packages listed in `requirements.txt`
 
-### **Stakeholder list:**  
+## Installation
 
-**Santander Bank**[3]  
-- **CISO (Chief Info Security Officer):** Allocates funding and oversees the project.
-- **SOC Lead:** Coordinates the teams and provides expertise on subject matter.
-- **Internal Data Owners:** Provides sample logs for analysis and testing.
+```
+python -m venv .venv
+.venv\Scripts\activate        # Windows
+source .venv/bin/activate     # macOS / Linux
+pip install -r requirements.txt
+```
 
-**Mandiant**[2]  
-- **Incident Response Engagement Director:** Oversees project delivery, budget management, scope adherence, and final presentation.  
-- **Security Analyst:** Deploys our log analysis tool. Essentially the main user of the product.  
+## Usage
 
-**Development Team**  
-- **Developers:** Ensures the tool works correctly and acts as a point of contact for Mandiant. Maintains transparency with other stakeholders.
+```
+python src/main.py Samples
+```
 
-## Scope Management 
-**In-scope items:**  
-- File directory traversal
-- Parsing Windows Event Logs (.evtx) and text (.txt) logs
-- LLM API integration for narrative generation
-- Identifying and flagging un-analyzable/suspicious files for manual review
-- Generating a final text/HTML report
+| Option | Default | Description |
+| --- | --- | --- |
+| `path` | `.` | Folder to scan (searched recursively) |
+| `-o`, `--output` | `event_graph.html` | Output path for the HTML report |
+| `--flagged-report` | `flagged_files.json` | Output path for the list of files needing manual review (written only when files are flagged) |
+| `--no-delay` | off | Print all output at once instead of pausing briefly between sections |
+| `--html-only` | off | Skip the terminal summary and only write the HTML report |
+| `--config` | `drain3.ini` in the project root | Drain3 configuration file |
 
-**Out-of-scope items:** [1]  
-- Live memory analysis/RAM analysis
-- Active network monitoring
-- Decrypting encrypted files
+The tool can be run from any directory. The HTML report is a single self-contained file that works offline.
 
-### **Project assumptions and constraints:**   
-**Assumptions:**  
-- Logs follow a standard format
-- The LLM Model is available when needed
-- Drain3 and NetworkX work as intended  
+### Terminal summary
 
-**Constraints:**  
-- Time constraints
-- Encrypted file formats
-- Lack of log context (nothing to piece clues together from)
-- Sensitive documents exposing personally identifiable information (PII)
+The terminal output is a short briefing, printed section by section with short pauses (turn them off with `--no-delay`, or skip it entirely with `--html-only`):
 
-## Timeline 
-1. **Project Proposal/Plan** - Submitted by August 27, 2026.
-2. **Log Parsing (Drain3)** - Functional by middle of September.
-3. **Flagging/Reporting (NetworkX)** - Functional by middle of October.
-4. **AI/LLM Summary** - Functional by the first week of November.
-5. **Testing** - Fully completed by last week of November.
-6. **Submit Project** - Submitted during first week of December.
+- **Overview**: how many events were read, the time span, and which Windows components produced them.
+- **Needs manual review**: files and folders that could not be fully analyzed, and why.
+- **Most common / rarest activity**: event types by frequency, with plain-English names such as "Failed logon".
+- **Suspicious activity, in order**: the first 10 events that look like an attack. Each entry says what happened in plain English (for example, "KeeFarce.exe injected code into KeePass.exe"), where it was found, and why it is suspicious. The full list is in the HTML report.
+- **Conclusion**: how many suspicious events were found, how many files need manual review, and which MITRE ATT&CK techniques the events match, each with a short explanation.
 
- ## Risk Management 
-- LLM Hallucinations/Inaccurate Analysis
-  - Impact: Medium
-  - Probability: Low
-  - Mitigation: Exploring various models to find the best qualities.
-- Malformed or Corrupted logs [1]
-  - Impact: Medium
-  - Probability: Low
-  - Mitigation: Flagging files for manual review, compiled into a comprehensive list.
-- Encrypted Files
-  - Impact: High
-  - Probability: Medium
-  - Mitigation: Decrypt first, analyze later; Flag files for manual review.
+### HTML report
 
- ## Resources 
-**Budget Allocation:** [1]    
-We will need a budget of $20.00 - $50.00 for API credits, but if the LLM is good enough to run locally, we will need a $0.00 budget to complete this project. 
+The report has three tabs:
 
-**Required Tools and Technology:**  
-- Python 3.0
-- python-evtx library
-- LLM API keys
-- Sample attack logs [1]  
+- **Timeline**: each log file is its own row, read left to right in the order things happened. Each circle is a step; when the same event happened several times in a row it becomes one circle labeled with its count (for example "x110"), and bigger circles mean more repeats. Circles are colored red (suspicious), orange (worth noting) or blue (routine). Hovering over a circle gives a one-line description; clicking it opens a panel with the full details, including why it was flagged. Long files are shortened to at most 25 steps per row: stretches of less important events become gray "... N more events ..." circles, keeping the suspicious steps and the steps right around them. Clicking a gray circle shows what it holds and can draw those steps in place (shown with dashed lines); the "Show hidden steps" button draws or hides every stretch at once.
+- **Suspicious activity**: every suspicious event, oldest first, with no limit. Entries can be filtered by file and ATT&CK technique or searched, and "Show on timeline" jumps to the event's circle. Clicking a red circle on the timeline links back to its entry.
+- **Needs manual review**: the flagged files and folders, with the reason for each.
 
-**Project Dependencies:** [1]  
-- **drain3 (version 0.9.11):** Dynamic Log Template Mining for parsing different types of log files.   
-- **networkx (version 3.1):** Maps data into graphs for creating a timeline of events, identifying key variables, etc.  
-- **evtx (version 0.7.4):** Python Library for parsing Windows Event Logs.  
-- **colorama (version 0.4.6, optional):** Makes terminal output prettier.  
+### Manual review
 
-## Communication 
-**Meeting Cadence and Reporting Frequency:**  
-We will plan to meet and report progress at least once per week with each other.  
+A file is flagged when it cannot be fully analyzed: an event log that is damaged or only partly readable, a text log that is empty or contains binary data, or a folder that cannot be opened. These are listed in the terminal, in the report and in `flagged_files.json`. A damaged or wiped log can itself be a sign of tampering, so these files should be checked by hand. `Samples/damaged_security_log.evtx` is included to show this.
 
-**Communication Channels:**  
-iMessage, Microsoft Teams, Microsoft Outlook  
+## How it works
 
-## Action Items 
-- Meeting with Stakeholders regularly to hear their comments on requirements.
-- Environment setup and dependency installation.
-- Gather common forensic log file paths.
-- Configure Drain3 and python-evtx.
-- Implement NetworkX.
-- LLM integration and report generation testing.
+1. **Scanning** (`src/scanner.py`): walks the target folder, collecting `.evtx`, `.txt`, `.log`, `.json` and `.jsonl` files and recording any folders that cannot be read.
+2. **Parsing** (`src/log_parser.py`): converts each EVTX record, or each line of a text log, into a single message and passes it to Drain3. JSON logs, including pretty-printed objects spread over several lines, are reduced to their event ID, time and message; Windows events exported as JSON (such as `Samples/WinEvents.log`) keep their source too. A timestamp at the start of a text line is pulled out so that lines differing only in time are grouped together. Each event ID becomes a token such as `EventID_4624`, so different events never share a template.
+3. **Graphing** (`src/grapher.py`): builds a NetworkX directed graph with one node per template and an edge for each "event A was followed by event B" within the same file, then lays out each file's events as a timeline for the HTML report. Each step is labeled with its event ID and name, or, for event types the tool does not recognize, with the line itself (or its pattern, when repeated lines differ).
+4. **Explaining** (`src/knowledge.py`): describes each event in plain English and decides whether it is suspicious. It knows common Security, Sysmon, PowerShell, Defender and BITS event IDs and MITRE ATT&CK technique IDs, and checks for signs such as known attack tools, programs running from folders any user can write to, code injection, access to LSASS (where Windows keeps passwords), cleared logs, and bursts of failed sign-ins.
+5. **Summary** (`src/summary.py`): finds suspicious activity (including bursts of failed sign-ins) and prints the overview, manual review list, activity tables, suspicious activity and conclusion. `src/pacing.py` adds the short pauses between sections.
+6. **Report** (`src/grapher.py`, `src/report_page.py`): writes the HTML report with its three tabs.
 
-## References
-[1] - Google Gemini  
-[2] - Mandiant: https://www.zdnet.com/article/fireeyes-mandiant-debuts-new-saas-threat-intelligence-suite/  
-[3] - Santander Bank: https://therecord.media/santander-employees-bank-breach-affected
+Drain3 masking rules (IP addresses, UUIDs, SIDs, hex values and numbers) are defined in `drain3.ini`.
+
+## TODO
+
+- **LLM summary**: send the findings (the suspicious activity, MITRE ATT&CK techniques and flagged files) to a large language model to write a narrative summary of the intrusion. This would also explain events from log formats the built-in rules do not cover.
+
+## Tests
+
+```
+pip install pytest
+python -m pytest tests
+```
+
+## Sample data
+
+- `Samples/WinEvents.log`: [Windows-Event-Samples](https://github.com/d4rk-d4nph3/Windows-Event-Samples/tree/main) by d4rk-d4nph3
+- `Samples/4794_DSRM_password_change_t1098.evtx`, `Samples/CA_keefarce_keepass_credump.evtx`, `Samples/babyshark_mimikatz_powershell.evtx`, `Samples/kerberos_pwd_spray_4771.evtx` and `Samples/DE_1102_security_log_cleared.evtx`: [EVTX-ATTACK-SAMPLES](https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES) by sbousseaden
+- `Samples/damaged_security_log.evtx`: a copy of `4794_DSRM_password_change_t1098.evtx` with part of its internal structure overwritten, to show how damaged logs are flagged for manual review
+
+## License
+
+MIT. See [LICENSE](LICENSE).
