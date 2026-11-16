@@ -7,7 +7,12 @@ The project plan is in [docs/ProjectProposal.md](docs/ProjectProposal.md).
 ## Requirements
 
 - Python 3.8 or newer
-- The packages listed in `requirements.txt`
+- The packages listed in `requirements.txt`:
+  - [Drain3](https://github.com/logpai/Drain3): groups log lines into event templates
+  - [NetworkX](https://networkx.org/): builds the graph of which events follow which
+  - [evtx](https://github.com/omerbenamram/pyevtx-rs): reads Windows Event Log (`.evtx`) files
+  - [pyvis](https://github.com/WestHealth/pyvis): draws the interactive graph with [vis-network](https://github.com/visjs/vis-network)
+  - [colorama](https://github.com/tartley/colorama): colors the terminal output
 
 ## Installation
 
@@ -49,9 +54,17 @@ The terminal output is a short briefing, printed section by section with short p
 
 The report has three tabs:
 
-- **Timeline**: each log file is its own row, read left to right in the order things happened. Each circle is a step; when the same event happened several times in a row it becomes one circle labeled with its count (for example "x110"), and bigger circles mean more repeats. Circles are colored red (suspicious), orange (worth noting) or blue (routine). Hovering over a circle gives a one-line description; clicking it opens a panel with the full details, including why it was flagged. Long files are shortened to at most 25 steps per row: stretches of less important events become gray "... N more events ..." circles, keeping the suspicious steps and the steps right around them. Clicking a gray circle shows what it holds and can draw those steps in place (shown with dashed lines); the "Show hidden steps" button draws or hides every stretch at once.
-- **Suspicious activity**: every suspicious event, oldest first, with no limit. Entries can be filtered by file and ATT&CK technique or searched, and "Show on timeline" jumps to the event's circle. Clicking a red circle on the timeline links back to its entry.
-- **Needs manual review**: the flagged files and folders, with the reason for each.
+1. **Timeline**: a picture of what happened in each log file.
+   - Each row is one log file, read left to right, oldest first.
+   - Each circle is a step. An event repeated several times in a row becomes one circle with a count, such as "x110". Bigger circles mean more repeats.
+   - Colors: red is suspicious, orange is worth noting, blue is routine.
+   - Hover over a circle for a one-line description. Click it for full details, including why it was flagged.
+   - Long files are shortened to at most 25 steps per row. Stretches of less important events become gray "... N more events ..." circles, while suspicious steps and the steps around them stay visible.
+   - Click a gray circle to see what it contains and to show those steps in place (drawn with dashed lines). The "Show hidden steps" button shows or hides all of them at once.
+2. **Suspicious activity**: every suspicious event, oldest first.
+   - Filter by file or ATT&CK technique, or search the text.
+   - "Show on timeline" jumps to the event's circle, and clicking a red circle links back to its entry.
+3. **Needs manual review**: the flagged files and folders, with the reason for each.
 
 ### Manual review
 
