@@ -1,6 +1,6 @@
 # L.A.A.S.T (Log Analysis And Summary Tool)
 
-L.A.A.S.T is a post-intrusion log analysis tool. It scans a folder for Windows Event Logs (`.evtx`) and text logs (`.txt`, `.log`, `.json`, `.jsonl`), groups their events into templates with [Drain3](https://github.com/logpai/Drain3), maps how events follow one another with [NetworkX](https://networkx.org/), points out activity that looks like an attack, and produces an interactive HTML report. Files or folders that cannot be fully analyzed are always flagged for manual review.
+L.A.A.S.T is a post-intrusion log analysis tool. It scans a folder for Windows Event Logs (`.evtx`) and text logs (`.txt`, `.log`, `.json`), groups their events into templates with [Drain3](https://github.com/logpai/Drain3), maps how events follow one another with [NetworkX](https://networkx.org/), points out activity that looks like an attack, and produces an interactive HTML report. Files or folders that cannot be fully analyzed are always flagged for manual review.
 
 The project plan is in [docs/ProjectProposal.md](docs/ProjectProposal.md).
 
